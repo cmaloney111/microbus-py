@@ -1,0 +1,125 @@
+[build-system]
+requires = ["hatchling>=1.24", "hatch-vcs>=0.4"]
+build-backend = "hatchling.build"
+
+[project]
+name = "microbus-py"
+description = "Python SDK for Microbus — first-class peer over the HTTP-over-NATS protocol"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+authors = [{ name = "Cameron Maloney", email = "cameron.maloney@warriorlife.net" }]
+dynamic = ["version"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "nats-py>=2.6,<3",
+    "pydantic>=2.6,<3",
+    "structlog>=24.1,<27",
+    "opentelemetry-api>=1.24,<2",
+    "opentelemetry-sdk>=1.24,<2",
+    "opentelemetry-exporter-otlp>=1.24,<2",
+    "PyJWT>=2.8,<3",
+    "cryptography>=42,<46",
+    "prometheus-client>=0.20,<1",
+    "httpx>=0.27,<1",
+    "jinja2>=3.1,<4",
+    "PyYAML>=6.0,<7",
+    "click>=8.1,<9",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.1,<9",
+    "pytest-asyncio>=0.23,<1",
+    "pytest-cov>=5.0,<6",
+    "pytest-timeout>=2.3,<3",
+    "respx>=0.21,<1",
+    "freezegun>=1.4,<2",
+    "hypothesis>=6.100,<7",
+]
+dev = [
+    "ruff>=0.4,<1",
+    "mypy>=1.10,<2",
+    "pre-commit>=3.7,<4",
+    "sphinx>=7.3,<9",
+    "sphinx-autodoc-typehints>=2.1,<3",
+    "furo>=2024.5",
+]
+codegen = [
+    "datamodel-code-generator>=0.25,<1",
+]
+
+[project.scripts]
+microbus-py = "microbus_py.cli.main:main"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/microbus_py"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "README.md", "LICENSE"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "ASYNC", "RET", "SIM", "TCH", "PL", "PTH", "RUF"]
+# ASYNC109: timeout parameters are part of our public API (mirrors fabric); we use them deliberately.
+ignore = ["PLR0913", "PLR2004", "ASYNC109"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["PLR2004", "S101"]
+# Mirrors complex Go algorithm; readability beats branch-count guidance here.
+"src/microbus_py/wire/subjects.py" = ["PLR0912"]
+# Route parsing is one branch per supported route shape — flat is best here.
+"src/microbus_py/connector/connector.py" = ["PLR0911"]
+"src/microbus_py/connector/route.py" = ["PLR0911"]
+"src/microbus_py/cfg/registry.py" = ["PLR0911", "PLR0912"]
+"src/microbus_py/decorators/event.py" = ["PLR0915"]
+"tests/unit/cache/test_distrib.py" = ["PLR0911"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src/microbus_py", "tests"]
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_decorators = false
+
+[[tool.mypy.overrides]]
+module = ["yaml"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+addopts = "-ra --strict-markers --strict-config --cov=microbus_py --cov-branch --cov-report=term-missing"
+testpaths = ["tests"]
+markers = [
+    "integration: needs a running nats-server",
+    "conformance: needs Go-Microbus sidecar (docker compose docker/docker-compose.conformance.yml)",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["microbus_py"]
+omit = ["src/microbus_py/_version.py"]
+
+[tool.coverage.report]
+exclude_also = [
+    "if TYPE_CHECKING:",
+    "@overload",
+]

@@ -1,0 +1,8 @@
+GET https://echo.example:443/echo HTTP/1.1
+Host: echo.example:443
+User-Agent: microbus/1.27.1
+Microbus-From-Host: tester.example
+Microbus-From-Id: deadbeef
+Microbus-Msg-Id: abc123
+Microbus-Op-Code: Req
+

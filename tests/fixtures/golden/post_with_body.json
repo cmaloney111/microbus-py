@@ -1,0 +1,19 @@
+{
+  "method": "POST",
+  "url": "https://echo.example:443/echo",
+  "headers": [
+    [
+      "User-Agent",
+      "microbus/1.27.1"
+    ],
+    [
+      "Microbus-Msg-Id",
+      "abc123"
+    ],
+    [
+      "Content-Type",
+      "application/octet-stream"
+    ]
+  ],
+  "bodyHex": "6161616161616161616161616161616161616161616161616161616161616161"
+}

@@ -1,0 +1,26 @@
+{
+  "method": "GET",
+  "url": "https://echo.example:443/echo",
+  "headers": [
+    [
+      "User-Agent",
+      "microbus/1.27.1"
+    ],
+    [
+      "Microbus-Msg-Id",
+      "abc123"
+    ],
+    [
+      "Microbus-From-Host",
+      "tester.example"
+    ],
+    [
+      "Microbus-From-Id",
+      "deadbeef"
+    ],
+    [
+      "Microbus-Op-Code",
+      "Req"
+    ]
+  ]
+}

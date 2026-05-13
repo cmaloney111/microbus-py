@@ -1,0 +1,8 @@
+POST https://echo.example:443/echo HTTP/1.1
+Host: echo.example:443
+User-Agent: microbus/1.27.1
+Content-Length: 32
+Content-Type: application/octet-stream
+Microbus-Msg-Id: abc123
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

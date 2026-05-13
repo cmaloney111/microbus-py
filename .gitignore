@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+MANIFEST.in
+/MANIFEST
+
+# Virtualenvs
+.venv/
+venv/
+env/
+.python-version
+
+# Tooling caches
+.coverage
+.coverage.*
+htmlcov/
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Sphinx
+docs/_build/
+docs/api/_autosummary/
+
+# Local secrets
+*.local.*
+.env
+.env.local
+
+# Build artifacts from ad-hoc Go capture
+tests/fixtures/golden/.tmp/
+.planning/

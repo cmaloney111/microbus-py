@@ -1,0 +1,14 @@
+services:
+  nats:
+    image: nats:2.10-alpine
+    command: -c /etc/nats/nats-server.conf
+    volumes:
+      - ./nats-server.conf:/etc/nats/nats-server.conf:ro
+    ports:
+      - "${NATS_PORT:-4222}:4222"
+      - "${NATS_HTTP_PORT:-8222}:8222"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8222/healthz"]
+      interval: 1s
+      timeout: 1s
+      retries: 30

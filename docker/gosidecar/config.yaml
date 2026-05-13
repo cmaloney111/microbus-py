@@ -1,0 +1,5 @@
+all:
+  Plane: microbus
+  Deployment: TESTING
+llm.core:
+  ProviderHostname: py-llm.example
